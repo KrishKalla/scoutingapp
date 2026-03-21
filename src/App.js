@@ -72,7 +72,6 @@ export default function App() {
           switchToDesktopView={() => setHomeView("desktop")}
         />
       );
-    }
 
     return (
       <CompetitionHomeMobileView
