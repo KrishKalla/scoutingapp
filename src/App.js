@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Analytics } from "@vercel/analytics/react";
 import { Analytics } from '@vercel/analytics/react';
 
 import CompetitionHomeMobileView from "./pages/home_page_mobile_view.jsx";
@@ -31,9 +30,7 @@ export default function App() {
   const [page, setPage] = useState("home");
   const [currentEventCode, setCurrentEventCode] = useState("");
   const [selectedTeamNumber, setSelectedTeamNumber] = useState(null);
-  const [selectedTeamNumber, setSelectedTeamNumber] = useState(null);
   const [homeView, setHomeView] = useState("desktop");
-
   const isDesktop = useIsDesktop();
 
   useEffect(() => {
@@ -43,43 +40,6 @@ export default function App() {
   }, [isDesktop]);
 
   if (page === "home") {
-    const showDesktopHome = isDesktop && homeView === "desktop";
-
-    return (
-      <>
-        {showDesktopHome ? (
-          <CompetitionHomeDesktopView
-            goToScoutingPage={(eventCode) => {
-              setCurrentEventCode(eventCode);
-              setSelectedTeamNumber(null);
-              setPage("scouting");
-            }}
-            switchToMobileView={() => setHomeView("mobile")}
-            goToPracticePage={() => {
-              setPage("practice");
-            }}
-          />
-        ) : (
-          <CompetitionHomeMobileView
-            goToScoutingPage={(eventCode) => {
-              setCurrentEventCode(eventCode);
-              setSelectedTeamNumber(null);
-              setPage("scouting");
-            }}
-            goToPracticePage={() => {
-              setPage("practice");
-            }}
-            goToTeamNotes={(eventCode, teamNumber) => {
-              setCurrentEventCode(eventCode);
-              setSelectedTeamNumber(teamNumber);
-              setPage("scouting");
-            }}
-            showDesktopButton={isDesktop}
-            switchToDesktopView={() => setHomeView("desktop")}
-          />
-        )}
-        <Analytics />
-      </>
     const showDesktopHome = isDesktop && homeView === "desktop";
 
     return (
@@ -120,24 +80,8 @@ export default function App() {
     );
   }
 
-  if (page === "scouting") {
+  if (page === "scoutingDesktop") {
     return (
-      <>
-        {isDesktop ? (
-          <MainScoutingPageDesktop
-            goHome={() => setPage("home")}
-            goToPracticePage={() => setPage("practice")}
-            eventCode={currentEventCode}
-          />
-        ) : (
-          <TeamListMobileView
-            goHome={() => setPage("home")}
-            initialTeamNumber={selectedTeamNumber}
-            eventCode={currentEventCode}
-          />
-        )}
-        <Analytics />
-      </>
       <>
         <MainScoutingPageDesktop
           goHome={() => setPage("home")}
@@ -162,20 +106,8 @@ export default function App() {
     );
   }
 
-  if (page === "practice") {
+  if (page === "practiceDesktop") {
     return (
-      <>
-        {isDesktop ? (
-          <DriversPracticeDesktopView
-            goBackToScouting={() => setPage("scouting")}
-          />
-        ) : (
-          <DriversPracticeMobileView
-            goHome={() => setPage("home")}
-          />
-        )}
-        <Analytics />
-      </>
       <>
         <DriversPracticeDesktopView
           goBackToScouting={() => setPage("scoutingDesktop")}
