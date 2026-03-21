@@ -470,7 +470,7 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
             <div className="flex items-center justify-between gap-3">
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs font-medium uppercase tracking-[0.24em] text-blue-200/80">
+                  <p className="text-xs font-11 uppercase tracking-[0.24em] text-blue-200/80">
                     SURFACE SCOUTING
                   </p>
                   <div className="inline-flex rounded-xl border border-white/10 bg-slate-800/70 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-slate-300">
@@ -562,17 +562,20 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
       
           <div className="mb-4 rounded-3xl border border-blue-300/15 bg-slate-800/80 p-4 shadow-xl">
             <div className="flex items-start justify-between gap-3">
-              <div>
+              <div className="min-w-0">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-200/85">
                   Match Breakdown
                 </p>
                 <h3 className="mt-1 text-lg font-bold text-white">Upcoming Alliances</h3>
               </div>
-              <div className="rounded-xl border border-blue-300/20 bg-blue-500/15 px-2.5 py-1 text-[11px] font-semibold text-blue-100 ring-1 ring-blue-300/20">
-                {upcomingMatch ? getDisplayMatchLabel(upcomingMatch) : settings.eventCode || "No Event"}
+
+              <div className="shrink-0 rounded-xl border border-blue-300/20 bg-blue-500/15 px-2.5 py-1 text-[11px] font-semibold text-blue-100 ring-1 ring-blue-300/20">
+                {upcomingMatch
+                  ? getDisplayMatchLabel(upcomingMatch)
+                  : settings.eventCode || "No Event"}
               </div>
             </div>
-      
+
             <div className="mt-4 grid gap-3">
               <AllianceBlock
                 label="With"
@@ -841,15 +844,15 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
                       </div>
       
                       <div className="grid shrink-0 grid-cols-3 gap-2 text-right text-xs text-slate-300">
-                        <div className="min-w-[3.5rem] rounded-lg bg-white/5 px-2 py-1.5">
+                        <div className="min-w-[2.5rem] rounded-lg bg-white/5 px-2 py-1.5">
                           <p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">OPR</p>
                           <p className="mt-0.5 font-semibold text-white">{formatOprValue(stats.opr)}</p>
                         </div>
-                        <div className="min-w-[4.5rem] rounded-lg bg-white/5 px-2 py-1.5">
+                        <div className="min-w-[3.5rem] rounded-lg bg-white/5 px-2 py-1.5">
                           <p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">W/L/T</p>
                           <p className="mt-0.5 font-semibold text-white">{formatDisplayValue(stats.wlt)}</p>
                         </div>
-                        <div className="min-w-[3rem] rounded-lg bg-white/5 px-2 py-1.5">
+                        <div className="min-w-[2rem] rounded-lg bg-white/5 px-2 py-1.5">
                           <p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">RP</p>
                           <p className="mt-0.5 font-semibold text-white">{formatRpValue(stats.rp)}</p>
                         </div>
@@ -878,7 +881,7 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
 
 function HeaderStatBubble({ label, value }) {
   return (
-    <div className="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-slate-200 ring-1 ring-white/10">
+    <div className="rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-semibold text-slate-200 ring-1 ring-white/10">
       <span className="text-slate-400">{label}</span>
       <span className="ml-1 text-white">{value}</span>
     </div>
