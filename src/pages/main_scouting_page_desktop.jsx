@@ -12,7 +12,7 @@ const PARK_ORDER = ["none", "partial", "full"];
 const AUTO_OPTIONS = ["0", "3", "6", "9", "12", "15", "18", "21+"];
 function getDefaultSettings() {
   return {
-    teamNumber: "223456",
+    teamNumber: "22345",
     fieldCount: 2,
     eventCode: "USNHCMP",
   };

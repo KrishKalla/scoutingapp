@@ -5,7 +5,7 @@ const TEST_SEASON = 2025;
 
 function getDefaultSettings() {
   return {
-    teamNumber: "223456",
+    teamNumber: "22345",
     fieldCount: 2,
     eventCode: "USNHCMP",
   };
