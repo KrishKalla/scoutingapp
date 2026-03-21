@@ -1,25 +1,107 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+import CompetitionHomeMobileView from "./pages/home_page_mobile_view.jsx";
+import TeamListMobileView from "./pages/scouting_page_mobile_view.jsx";
+import DriversPracticeMobileView from "./pages/drivers_practice_mobile_view.jsx";
+
+import CompetitionHomeDesktopView from "./pages/welcome_splash_desktop.jsx";
+import MainScoutingPageDesktop from "./pages/main_scouting_page_desktop.jsx";
+import DriversPracticeDesktopView from "./pages/drivers_practice_page_desktop.jsx";
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== "undefined" ? window.innerWidth >= 1024 : false
   );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isDesktop;
 }
 
-export default App;
+export default function App() {
+  const [page, setPage] = useState("home");
+  const [currentEventCode, setCurrentEventCode] = useState("");
+  const [homeView, setHomeView] = useState("desktop");
+  const isDesktop = useIsDesktop();
+
+  useEffect(() => {
+    if (!isDesktop) {
+      setHomeView("mobile");
+    }
+  }, [isDesktop]);
+
+  if (page === "home") {
+    if (isDesktop && homeView === "desktop") {
+      return (
+        <CompetitionHomeDesktopView
+          goToScoutingPage={(eventCode) => {
+            setCurrentEventCode(eventCode);
+            setPage("scoutingDesktop");
+          }}
+          switchToMobileView={() => setHomeView("mobile")}
+          goToPracticePage={() => {
+            setPage("practiceDesktop");
+          }}
+        />
+      );
+    }
+
+    return (
+      <CompetitionHomeMobileView
+        goToScoutingPage={(eventCode) => {
+          setCurrentEventCode(eventCode);
+          setPage("scoutingMobile");
+        }}
+        goToPracticePage={() => {
+          setPage(isDesktop ? "practiceDesktop" : "practiceMobile");
+        }}
+        showDesktopButton={isDesktop}
+        switchToDesktopView={() => setHomeView("desktop")}
+      />
+    );
+  }
+
+  if (page === "scoutingDesktop") {
+    return (
+      <MainScoutingPageDesktop
+        goHome={() => setPage("home")}
+        goToPracticePage={() => setPage("practiceDesktop")}
+        eventCode={currentEventCode}
+      />
+    );
+  }
+
+  if (page === "scoutingMobile") {
+    return (
+      <TeamListMobileView
+        goHome={() => setPage("home")}
+        eventCode={currentEventCode}
+      />
+    );
+  }
+
+  if (page === "practiceDesktop") {
+    return (
+      <DriversPracticeDesktopView
+        goBackToScouting={() => setPage("scoutingDesktop")}
+      />
+    );
+  }
+
+  if (page === "practiceMobile") {
+    return (
+      <DriversPracticeMobileView
+        goHome={() => setPage("home")}
+      />
+    );
+  }
+
+  return null;
+}
