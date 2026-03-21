@@ -266,7 +266,7 @@ function normalizeTournamentMatch(match) {
 }
 
 
-export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracticePage }) {
+export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracticePage, goToTeamNotes}) {
   const [searchTeam, setSearchTeam] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState(loadSavedSettings);
@@ -586,6 +586,7 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
                 teamNumber={settings.teamNumber}
                 variant="our"
                 emptyMessage={loading ? "Loading partner..." : "No upcoming partner found."}
+                onTeamClick={(team) => goToTeamNotes?.(settings.eventCode, team)}
               />
               <AllianceBlock
                 label="Against"
@@ -595,6 +596,7 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
                 statsMap={statsMap}
                 variant="opponents"
                 emptyMessage={loading ? "Loading opponents..." : "No upcoming opponents found."}
+                onTeamClick={(team) => goToTeamNotes?.(settings.eventCode, team)}
               />
             </div>
           </div>
@@ -787,6 +789,7 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
       teamNumber,
       variant = "our",
       emptyMessage,
+      onTeamClick,
       }) {
       const wrapperClasses =
       tone === "red"
@@ -835,7 +838,12 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
               const stats = statsMap[team] ?? {};
       
               return (
-                <div key={team} className="overflow-hidden rounded-xl border border-white/10 bg-slate-950/35 px-3 py-3">
+                <button
+                  key={team}
+                  type="button"
+                  onClick={() => onTeamClick?.(team)}
+                  className="overflow-hidden rounded-xl border border-white/10 bg-slate-950/35 px-3 py-3 text-left transition hover:bg-white/10"
+                >
                   {variant === "our" ? (
                     <div className="flex min-w-0 items-between gap-2">
                       <div className="min-w-0 flex-1">
@@ -870,7 +878,7 @@ export default function CompetitionHomeMobileView({ goToScoutingPage, goToPracti
                       </div>
                     </div>
                   )}
-                </div>
+                </button>
               );
             })}
           </div>
