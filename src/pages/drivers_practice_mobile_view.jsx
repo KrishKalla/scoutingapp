@@ -26,6 +26,12 @@ export default function DriversPracticeMobileView({ goHome }) {
   const rpTotal =
     Number(rpArtifacts) + Number(rpMotif) + Number(rpLeaveAndPark);
 
+  const totalScore = useMemo(() => {
+    const leavePts = autoLeave ? 3 : 0;
+    const parkPts = endgamePark === "full" ? 10 : endgamePark === "partial" ? 5 : 0;
+    return 3 * totalArtifacts + 2 * totalMotif + leavePts + parkPts;
+  }, [totalArtifacts, totalMotif, autoLeave, endgamePark]);
+
   const startTimerVideo = () => {
     if (!videoRef.current) return;
     videoRef.current.currentTime = 0;
@@ -108,6 +114,7 @@ export default function DriversPracticeMobileView({ goHome }) {
           <TotalsSection
             totalArtifacts={totalArtifacts}
             totalMotif={totalMotif}
+            totalScore={totalScore}
           />
 
           <RPCalculatorSection
@@ -325,31 +332,26 @@ function TimerSection({ videoRef, onStart }) {
   );
 }
 
-function TotalsSection({ totalArtifacts, totalMotif }) {
+function TotalsSection({ totalArtifacts, totalMotif, totalScore }) {
   return (
-    <div className="rounded-2xl border border-transparent bg-white/5 p-3 shadow-sm">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-200/85">
-        Totals
-      </p>
+    <div className="rounded-2xl bg-white/5 p-3 shadow-sm">
+      <p className="text-[11px] uppercase tracking-[0.2em] text-blue-200/85">Totals</p>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
         <div className="rounded-xl bg-slate-950/35 p-3 text-center">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
-            Artifacts
-          </p>
-          <p className="mt-1 text-3xl font-bold tabular-nums text-white">
-            {totalArtifacts}
-          </p>
+          <p className="text-xs text-slate-400">Artifacts</p>
+          <p className="text-3xl font-bold">{totalArtifacts}</p>
         </div>
 
         <div className="rounded-xl bg-slate-950/35 p-3 text-center">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
-            Motif
-          </p>
-          <p className="mt-1 text-3xl font-bold tabular-nums text-white">
-            {totalMotif}
-          </p>
+          <p className="text-xs text-slate-400">Motif</p>
+          <p className="text-3xl font-bold">{totalMotif}</p>
         </div>
+      </div>
+
+      <div className="mt-3 rounded-xl bg-blue-500/15 p-4 text-center">
+        <p className="text-xs text-blue-200/80">Total Score</p>
+        <p className="text-4xl font-bold text-blue-100">{totalScore}</p>
       </div>
     </div>
   );
