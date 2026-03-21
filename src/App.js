@@ -49,11 +49,11 @@ export default function App() {
             goToScoutingPage={(eventCode) => {
               setCurrentEventCode(eventCode);
               setSelectedTeamNumber(null);
-              setPage("scouting");
+              setPage("scoutingDesktop");
             }}
             switchToMobileView={() => setHomeView("mobile")}
             goToPracticePage={() => {
-              setPage("practice");
+              setPage("practiceDesktop");
             }}
           />
         ) : (
