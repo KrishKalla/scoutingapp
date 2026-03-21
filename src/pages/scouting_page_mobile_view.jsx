@@ -400,25 +400,35 @@ export default function TeamListMobileView({ goHome, eventCode, initialTeamNumbe
       return Number(value) || 0;
     };
 
+    const getNonZeroAverageForSide = (team, side) => {
+      const matches = Array.isArray(team?.scoutingMatches) ? team.scoutingMatches : [];
+
+      const values = matches
+        .map((match) => {
+          if (side === "close") return parseAutoValue(match.autoClose);
+          if (side === "far") return parseAutoValue(match.autoFar);
+          return 0;
+        })
+        .filter((value) => value > 0);
+
+      if (values.length === 0) return 0;
+
+      const total = values.reduce((sum, value) => sum + value, 0);
+      return total / values.length;
+    };
+
     const filteredTeams = teams.filter((team) => {
       if (!autoFilterSide || autoFilterThreshold === "all") {
         return true;
       }
 
       const threshold = parseAutoValue(autoFilterThreshold);
+      const average = getNonZeroAverageForSide(team, autoFilterSide);
 
-      if (autoFilterSide === "close") {
-        return parseAutoValue(team.autoClose) >= threshold;
-      }
-
-      if (autoFilterSide === "far") {
-        return parseAutoValue(team.autoFar) >= threshold;
-      }
-
-      return true;
+      return average >= threshold;
     });
 
-    return filteredTeams.sort((a, b) => {
+    return [...filteredTeams].sort((a, b) => {
       if (sortBy === "opr") return b.opr - a.opr;
       if (sortBy === "rp") return b.rp - a.rp;
       return a.number - b.number;
