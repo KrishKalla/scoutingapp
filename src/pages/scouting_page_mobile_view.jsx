@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useRef, useEffect, useMemo, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const API_BASE = "https://api.ftcscout.org/rest/v1";
@@ -152,8 +152,8 @@ function mergeScoutingData(team, savedRows) {
   };
 }
 
-export default function TeamListMobileView({ goHome, eventCode }) {
-    const [sortBy, setSortBy] = useState("number");
+export default function TeamListMobileView({ goHome, eventCode, initialTeamNumber }) {
+  const [sortBy, setSortBy] = useState("number");
   const [autoFilterSide, setAutoFilterSide] = useState(null);
   const [autoFilterThreshold, setAutoFilterThreshold] = useState("all");
   const [showAutoFilter, setShowAutoFilter] = useState(false);
@@ -161,6 +161,8 @@ export default function TeamListMobileView({ goHome, eventCode }) {
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [teamsError, setTeamsError] = useState("");
   const [realtimeStatus, setRealtimeStatus] = useState("connecting");
+  const teamRefs = useRef({});
+  const hasAutoScrolled = useRef(false);
 
   const updateSelectedMatchIndex = (teamNumber, matchIndex) => {
     setTeams((prevTeams) =>
@@ -423,6 +425,32 @@ export default function TeamListMobileView({ goHome, eventCode }) {
     });
   }, [teams, sortBy, autoFilterSide, autoFilterThreshold]);
 
+  //Auto Scroll to clicked team when coming from homepage
+  useEffect(() => {
+    if (!initialTeamNumber) return;
+    if (!filteredAndSortedTeams?.length) return;
+    if (hasAutoScrolled.current) return;
+
+    const targetTeam = Number(initialTeamNumber);
+    const exists = filteredAndSortedTeams.some(
+      (team) => Number(team.number) === targetTeam
+    );
+    if (!exists) return;
+
+    const el = teamRefs.current[targetTeam];
+    if (!el) return;
+
+    const timeout = setTimeout(() => {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      hasAutoScrolled.current = true;
+    }, 250);
+
+    return () => clearTimeout(timeout);
+  }, [initialTeamNumber, filteredAndSortedTeams]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-950 to-slate-950 text-white">
       <div className="mx-auto w-full max-w-md px-4 py-5">
@@ -565,7 +593,11 @@ export default function TeamListMobileView({ goHome, eventCode }) {
             return (
             <details
               key={team.number}
-              className="group overflow-hidden rounded-3xl border border-transparent bg-slate-800/85 shadow-xl transition-all duration-200"
+              ref={(el) => {
+                if (el) teamRefs.current[team.number] = el;
+              }}
+              open={Number(team.number) === Number(initialTeamNumber)}
+              className="group overflow-hidden rounded-3xl border border-blue-300/15 bg-slate-800/85 shadow-xl transition-all duration-200"
             >
               <summary className="list-none cursor-pointer px-4 py-3.5">
                 <div className="flex items-center gap-2.5 text-sm">

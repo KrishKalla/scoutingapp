@@ -28,6 +28,7 @@ function useIsDesktop() {
 export default function App() {
   const [page, setPage] = useState("home");
   const [currentEventCode, setCurrentEventCode] = useState("");
+  const [selectedTeamNumber, setSelectedTeamNumber] = useState(null);
   const [homeView, setHomeView] = useState("desktop");
   const isDesktop = useIsDesktop();
 
@@ -62,6 +63,11 @@ export default function App() {
         goToPracticePage={() => {
           setPage(isDesktop ? "practiceDesktop" : "practiceMobile");
         }}
+        goToTeamNotes={(eventCode, teamNumber) => {
+          setCurrentEventCode(eventCode);
+          setSelectedTeamNumber(teamNumber);
+          setPage("scoutingMobile");
+        }}
         showDesktopButton={isDesktop}
         switchToDesktopView={() => setHomeView("desktop")}
       />
@@ -83,6 +89,7 @@ export default function App() {
       <TeamListMobileView
         goHome={() => setPage("home")}
         eventCode={currentEventCode}
+        initialTeamNumber={selectedTeamNumber}
       />
     );
   }
