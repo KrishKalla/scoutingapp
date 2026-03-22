@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 import CompetitionHomeMobileView from "./pages/home_page_mobile_view.jsx";
 import TeamListMobileView from "./pages/scouting_page_mobile_view.jsx";
@@ -76,6 +77,7 @@ export default function App() {
           />
         )}
         <Analytics />
+        <SpeedInsights />
       </>
     );
   }
@@ -89,6 +91,7 @@ export default function App() {
           eventCode={currentEventCode}
         />
         <Analytics />
+        <SpeedInsights />
       </>
     );
   }
@@ -102,6 +105,7 @@ export default function App() {
           eventCode={currentEventCode}
         />
         <Analytics />
+        <SpeedInsights />
       </>
     );
   }
@@ -113,6 +117,7 @@ export default function App() {
           goBackToScouting={() => setPage("scoutingDesktop")}
         />
         <Analytics />
+        <SpeedInsights />
       </>
     );
   }
@@ -124,6 +129,7 @@ export default function App() {
           goHome={() => setPage("home")}
         />
         <Analytics />
+        <SpeedInsights />
       </>
     );
   }
