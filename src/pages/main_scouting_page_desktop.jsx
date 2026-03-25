@@ -212,7 +212,7 @@ function normalizeTeamStatsEntry(entry) {
 
   return {
     teamNumber,
-    opr: formatNumericStat(stats?.opr?.totalPoints),
+    opr: formatNumericStat(stats?.opr?.totalPointsNp),
     rp: formatNumericStat(stats?.rp),
     wlt: formatDisplayValue(record),
     rank: formatDisplayValue(entry?.rank ?? entry?.stats?.rank),
